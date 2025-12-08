@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 
-from base import Base
+from .base import Base
 
 
 class User(Base):
@@ -11,7 +11,7 @@ class User(Base):
 
     first_name=Column(String(100),nullable=False)
     middle_name=Column(String(100),nullable=True)
-    last_name=Column(String(100),nullabler=False)
+    last_name=Column(String(100),nullable=False)
 
     email=Column(String(100),nullable=False,unique=True)
     password_hash=Column(String(100),nullable=False)

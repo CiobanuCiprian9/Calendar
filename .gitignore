@@ -18,11 +18,17 @@ env/
 
 alembic/__pycache__/
 alembic/versions/__pycache__/
+alembic.ini
 
 .DS_Store
 
 *.db
 
+node_modules/
 build/
 dist/
 *.egg-info/
+
+.gitignore
+
+node_modules

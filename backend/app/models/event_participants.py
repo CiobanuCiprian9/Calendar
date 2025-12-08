@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 
-from base import Base
+from .base import Base
 
 class EventParticipant(Base):
     __tablename__="Event_Participants"
