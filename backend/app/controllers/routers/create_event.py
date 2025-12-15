@@ -18,7 +18,7 @@ async def event(
         request: Request,
         db: Session= Depends(get_db),
         current_user_id: int= Depends(get_current_user_id),
-):
+    ):
     body = await request.json()
 
     title = body.get("title")

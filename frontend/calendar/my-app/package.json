@@ -4,6 +4,9 @@
   "private": true,
   "dependencies": {
     "@js-temporal/polyfill": "^0.5.1",
+    "@schedule-x/drag-and-drop": "^3.5.0",
+    "@schedule-x/event-modal": "^3.5.0",
+    "@schedule-x/events-service": "^3.5.0",
     "@schedule-x/react": "^3.4.0",
     "@schedule-x/theme-default": "^3.5.0",
     "@testing-library/dom": "^10.4.1",
@@ -12,6 +15,7 @@
     "@testing-library/user-event": "^13.5.0",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
+    "react-router-dom": "^7.10.1",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
