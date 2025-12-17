@@ -3,7 +3,7 @@ from typing import Optional, List
 from sqlalchemy.orm import Session, joinedload
 
 import models
-
+from domain.event_bus import event_bus
 
 class Events:
     def __init__(self,db: Session):
@@ -54,7 +54,17 @@ class Events:
         self.db.commit()
         self.db.refresh(event)
 
+        event = (
+            self.db.query(models.Event)
+            .options(
+                joinedload(models.Event.participants).joinedload(models.EventParticipant.user)
+            )
+            .filter(models.Event.id == event.id)
+            .first()
+        )
+
         event.participants=participants
+        event_bus.publish("event_created", {"event": event})
 
         return event
 

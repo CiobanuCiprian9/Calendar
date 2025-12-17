@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import Calendar from './app/calendarPage/calendar/calendarPage';
@@ -6,6 +5,7 @@ import AuthPage from './app/authPage/authPage';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {Temporal} from "@js-temporal/polyfill";
+import GoogleSuccessPage from './app/authPage/GoogleSuccessPage';
 if(!window.Temporal){
   window.Temporal=Temporal;
 }
@@ -13,7 +13,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <BrowserRouter>
     <Routes>
-      <Route path="/auth" element={<AuthPage />} />
+      <Route path="/auth/google-success" element={<GoogleSuccessPage />} />
       <Route path="/calendar" element={<Calendar />} />
       <Route path="/" element={<AuthPage />} />
     </Routes>

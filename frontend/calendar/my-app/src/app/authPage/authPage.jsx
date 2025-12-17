@@ -25,7 +25,7 @@ function AuthPage() {
   const navigate=useNavigate();
 
   const handleGoogle = () => {
-    window.location.href = `${API_BASE}/auth`;
+    window.location.href = `${API_BASE}/auth/google/login`;
   };
 
   //login
@@ -46,7 +46,7 @@ function AuthPage() {
     }
 
     try{
-      const res=await fetch(`${API_BASE}/login`, {
+      const res=await fetch(`${API_BASE}/auth/login`, {
         method:"POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
@@ -104,7 +104,7 @@ function AuthPage() {
     }
 
     try{
-      const res=await fetch(`${API_BASE}/register`, {
+      const res=await fetch(`${API_BASE}/auth/register`, {
         method:"POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({

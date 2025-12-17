@@ -1,11 +1,15 @@
+import os
+
 from fastapi import APIRouter, HTTPException,Request,Depends,status
 from sqlalchemy import func
 from sqlalchemy.orm import Session
+from starlette.responses import RedirectResponse
 
 import models
+from auth.google_oauth import oauth
 from repositories.database import get_db
 
-router=APIRouter()
+router=APIRouter(prefix="/auth")
 
 @router.post("/register")
 async def register(request: Request, db: Session = Depends(get_db)):
@@ -78,3 +82,68 @@ async def login(request: Request, db: Session = Depends(get_db)):
         "email": user.email,
         "message": "login ok",
     }
+
+#google auth
+def create_token_for_user(user: models.User) -> str:
+    import uuid
+    return str(uuid.uuid4())
+
+@router.get("/google/login")
+async def google_login(request: Request):
+    redirect_uri = request.url_for("google_callback")
+    try:
+        return await oauth.google.authorize_redirect(request, redirect_uri)
+    except Exception as e:
+        print("Google login error:", repr(e))
+        raise HTTPException(
+            status_code=500,
+            detail=f"Google login failed: {e}",
+        )
+
+FRONTEND_ORIGIN = os.getenv("FRONTEND_ORIGIN", "http://localhost:3000")
+@router.get("/google/callback", name="google_callback")
+async def google_callback(
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    try:
+        token = await oauth.google.authorize_access_token(request)
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Google auth failed",
+        )
+
+    userinfo = token.get("userinfo")
+    if not userinfo:
+        userinfo = await oauth.google.parse_id_token(request, token)
+
+    email = userinfo.get("email")
+    first_name = userinfo.get("given_name", "")
+    last_name = userinfo.get("family_name", "")
+
+    if not email:
+        raise HTTPException(
+            status_code=400,
+            detail="Google did not return email",
+        )
+
+    user = db.query(models.User).filter(models.User.email == email).first()
+    if not user:
+        user = models.User(
+            first_name=first_name or "Google",
+            middle_name=None,
+            last_name=last_name or "",
+            email=email,
+            password_hash="",
+            timezone="Europe/Bucharest",
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+
+    access_token = create_token_for_user(user)
+
+
+    redirect_url = f"{FRONTEND_ORIGIN}/auth/google-success?user_id={user.id}&access_token={access_token}"
+    return RedirectResponse(url=redirect_url)
