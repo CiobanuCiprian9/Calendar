@@ -1,0 +1,62 @@
+.event-modal{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+
+.event-card{
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 360px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.user-search{
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    max-height: 150px;
+    overflow-y: auto;
+    margin-top: 4px;
+}
+
+.user-find{
+    padding: 6px 8px;
+    cursor: pointer;
+}
+
+.user-selected{
+    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+
+}
+
+.user-selected-box{
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: #e5e7eb;
+    font-size: 12px;
+}
+
+.user-cancel{
+    border: none;
+    background: transparent;
+    margin-left: 4px;
+    cursor: pointer;
+}
+
+.finish-event-buttons{
+    margin-top: 16px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}

@@ -1,23 +1,19 @@
 from datetime import date
 
-from fastapi import APIRouter, Request, Depends, HTTPException
+from fastapi import APIRouter, Request, Depends, Query
 from sqlalchemy.orm import Session
 
+from controllers.helpers.event_mapper import event_to_response
 from repositories.database import get_db
 from services.event_service import Events
 
 router=APIRouter()
 
-
-def get_current_user_id() -> int:
-    # TODO: înlocuiești cu logica ta reală de auth
-    return 1
-
-@router.post("/")
-async def event(
+@router.post("/create_event")
+async def create_event(
         request: Request,
         db: Session= Depends(get_db),
-        current_user_id: int= Depends(get_current_user_id),
+        user_id: int | None = Query(None),
     ):
     body = await request.json()
 
@@ -29,21 +25,15 @@ async def event(
     location = body.get("location")
     participant_ids = body.get("participant_ids") or []
 
-    if event_date_str:
-        try:
-            year, month, day = map(int, event_date_str.split("-"))
-            event_date = date(year, month, day)
-        except Exception:
-            raise HTTPException(
-                status_code=400,
-                detail=f"Invalid event_date format: {event_date_str} (expected YYYY-MM-DD)",
-            )
-
+    year, month, day = map(int, event_date_str.split("-"))
+    event_date = date(year, month, day)
 
     service = Events(db)
+
     event = service.create_event(
-        owner_id=current_user_id,
+        owner_id=user_id,
         title=title,
+        event_date=event_date,
         start_time=start_time_str,
         end_time=end_time_str,
         description=description,
@@ -51,18 +41,4 @@ async def event(
         participant_ids=participant_ids,
     )
 
-    participants_json = [
-        {"user_id": p.user_id, "status": p.status}
-        for p in event.participants
-    ]
-
-    return {
-        "id": event.id,
-        "owner_id": event.owner_id,
-        "title": event.title,
-        "description": event.description,
-        "start_time": event.start_time.isoformat(),
-        "end_time": event.end_time.isoformat(),
-        "location": event.location,
-        "participants": participants_json,
-    }
+    return event_to_response(event)

@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 import os
 from starlette.middleware.cors import CORSMiddleware
-from controllers.routers import create_event,get_event,authentification
+from controllers.routers import create_event,get_event,authentification,user_router
 
 
 def create_app():
@@ -11,6 +11,7 @@ def create_app():
     app.include_router(create_event.router)
     app.include_router(get_event.router)
     app.include_router(authentification.router)
+    app.include_router(user_router.router)
 
     fe_origin = os.getenv("FRONTEND_ORIGIN")
     app.add_middleware(

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import Calendar from './app/calendarPage/calendarPage';
+import Calendar from './app/calendarPage/calendar/calendarPage';
 import AuthPage from './app/authPage/authPage';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
