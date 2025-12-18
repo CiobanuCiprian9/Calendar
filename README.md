@@ -62,23 +62,23 @@ This project applies the **Strategy** and **Observer** design patterns because t
 
 ---
 
-# 3.1. **Why These Design Patterns Were Used**
+## 3.1. **Why These Design Patterns Were Used**
 
-### **Observer Pattern – event-driven architecture**
+### **Observer Pattern - event-driven architecture**
 The application needs to perform additional actions automatically when an event is created.
 Currently, the only action is sending email notifications to invited participants, but the Observer pattern ensures that the event creation logic remains decoupled from notification logic.
 Even if there is only one subscriber, the architecture allows adding new behaviors (logging, metrics, push notifications, syncing to external systems) without modifying the event creation service.
 
 ---
 
-### **Strategy Pattern – different notification channels**
+### **Strategy Pattern - different notification channels**
 Notification delivery should be independent from event creation or business logic.
 Strategy allows the application to define different notification delivery mechanisms (email, SMS, in-app, push) and swap them without modifying the event-creation code.
 The event service only calls a strategy interface, remaining unaware of the actual notification channel
 
 ---
 
-# 3.1. **What problems does these design pattern solve**
+## 3.2. **What problems does these design pattern solve**
 
 ### **Observer Pattern**
 - Prevents the event creation service from containing notification logic, keeping business code clean.
